@@ -42,3 +42,10 @@ Most small caches pick one eviction rule. A pure LRU cache will happily hold a s
 ## The awkward edge
 
 `has` does not refresh recency. This is deliberate: it lets you check existence without perturbing the eviction order, which matters when you are scanning a cache. The cost is that `has` followed by `set` on a different key can evict the key you just checked. If you want the recency bump, use `get`.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
